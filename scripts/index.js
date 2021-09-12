@@ -13,7 +13,7 @@ function playSong(songId) {
 
     // Plays a song
     const playedSong = document.getElementById(songId);
-    playedSong.style.backgroundColor = "#33D325";
+    playedSong.style.backgroundColor = "rgb(45,241,45)";
     playedSong.style.marginLeft = "20px";
 
     // Song number on the list that is played
@@ -26,6 +26,22 @@ function playSong(songId) {
         nextSongIndexToPlay = 0;
     }
     let nextIdToPlay = sortedPlayerSongs[nextSongIndexToPlay].id;
+
+    setTimeout( () => {
+        playedSong.style.backgroundColor = `rgb(143,241,45)`;
+    }, 120000);
+
+    setTimeout( () => {
+        playedSong.style.backgroundColor = `rgb(241,241,45)`;
+    }, 220000);
+
+    setTimeout( () => {
+        playedSong.style.backgroundColor = `rgb(241,143,45)`;
+    }, 320000);
+
+    setTimeout( () => {
+        playedSong.style.backgroundColor = `rgb(241,45,45)`;
+    }, 420000);
 
     setTimeout( () => {
         playSong(nextIdToPlay);
