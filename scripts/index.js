@@ -141,10 +141,10 @@ function showPlaylists(){
     const playlistsListDiv = document.getElementById("playlists");
     playlistsListDiv.classList.add("playerParts");
     const sortedPlayerPlaylists = player.playlists;
-    sortedPlayerSongs.sort(function(a,b){
+    sortedPlayerPlaylists.sort(function(a,b){
         if(a.name.toLowerCase()<b.name.toLowerCase())return -1;
         else return 1;
-      });
+    });
 
     for(let playlists of sortedPlayerPlaylists){
         const newPlaylistDiv = createElement("div", [], ["playlists"]);
