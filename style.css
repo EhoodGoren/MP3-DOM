@@ -5,7 +5,7 @@ body {
 }
 
 .songs, .playlists {
-    width: 40%;
+    width: 500px;
     height: 50px;
     background-Color : #C5EDF0;
     margin-Left : 0px;

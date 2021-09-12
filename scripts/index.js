@@ -129,6 +129,9 @@ function showSongs(){
         const newSongDiv = createSongElement(songs);
         newSongDiv.style.border = "4px solid black";
         for(let attributes in songs){
+            if(attributes === "id"){
+                continue;
+            }
             if(attributes === "duration"){
                 newSongDiv.textContent += durationToMS(songs[attributes]) + " ";
                 continue;
@@ -138,7 +141,7 @@ function showSongs(){
                 newSongDiv.appendChild(songImg);
                 continue;
             }
-            newSongDiv.textContent += songs[attributes] + " ";
+            newSongDiv.textContent += songs[attributes] + ' / ' ;
         }
         songListDiv.appendChild(newSongDiv);
     }
@@ -158,7 +161,14 @@ function showPlaylists(){
         const newPlaylistDiv = createElement("div", [], ["playlists"]);
         newPlaylistDiv.style.border = "4px solid black";
         for(let attributes in playlists){
-            newPlaylistDiv.textContent += playlists[attributes] + " ";
+            if(attributes === "id"){
+                continue;
+            }
+            if(attributes === "songs"){
+                newPlaylistDiv.textContent += playlists[attributes].length + " Songs / ";
+                continue;
+            }
+            newPlaylistDiv.textContent += playlists[attributes] + " / ";
         }
         const newPlaylistDuration = playlistDuration(playlists.id);
         newPlaylistDiv.textContent += durationToMS(newPlaylistDuration) + " " ;
