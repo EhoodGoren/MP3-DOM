@@ -46,13 +46,22 @@ function createElement(tagName, children = [], classes = [], attributes = {}) {
 
 // You can write more code below this line
 
+// Changes duration format from seconds to minutes:seconds
+function durationToMS(duration){
+    let minutes=Math.floor(duration/60);
+    let seconds=duration%60;
+    if(minutes<10) minutes="0"+minutes;
+    if(seconds<10) seconds="0"+seconds;
+    return `${minutes}:${seconds}`;
+}
+
 const songsList = document.getElementById("songs");
 const playerSongs = player.songs;
 for(let songs of playerSongs){
     const songDiv = document.createElement("div");
     songDiv.style.border = "4px solid black";
     for(let attributes in songs){
-        if(attributes==="coverArt"){
+        if(attributes === "coverArt"){
             const songImg = document.createElement("img");
             songImg.src = songs[attributes];
             songImg.style.width = "50px";
@@ -60,7 +69,12 @@ for(let songs of playerSongs){
             songDiv.appendChild(songImg);
             continue;
         }
+        if(attributes === "duration"){
+            songDiv.textContent += durationToMS(songs[attributes]) + " ";
+            continue;
+        }
         songDiv.textContent += songs[attributes] + " ";
     }
     songsList.appendChild(songDiv);
 }
+
