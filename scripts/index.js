@@ -5,8 +5,14 @@
  * @param {String} songId - the ID of the song to play
  */
 function playSong(songId) {
+    const allDivs = document.getElementsByClassName("songs");
+    for(let divs of allDivs){
+        divs.style.backgroundColor = "#C5EDF0";
+        divs.style.marginLeft = "0px";
+    }
+
     const playedSong = document.getElementById(songId);
-    playedSong.style.backgroundColor = "green";
+    playedSong.style.backgroundColor = "#33D325";
     playedSong.style.marginLeft = "20px";
 }
 
@@ -17,7 +23,7 @@ function createSongElement({ id, title, album, artist, duration, coverArt }) {
     //const songImg = createElement("img", [], ["songImgs"], { src: coverArt , style:"width : 50px", style:"height : 50px" });
     //const children = [songImg];
     const children = [];
-    const classes = [];
+    const classes = ["songs"];
     const attrs = {
         "id":id,
         /*"title":title,
