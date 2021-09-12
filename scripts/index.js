@@ -45,3 +45,22 @@ function createElement(tagName, children = [], classes = [], attributes = {}) {
 }
 
 // You can write more code below this line
+
+const songsList = document.getElementById("songs");
+const playerSongs = player.songs;
+for(let songs of playerSongs){
+    const songDiv = document.createElement("div");
+    songDiv.style.border = "4px solid black";
+    for(let attributes in songs){
+        if(attributes==="coverArt"){
+            const songImg = document.createElement("img");
+            songImg.src = songs[attributes];
+            songImg.style.width = "50px";
+            songImg.style.height = "50px";
+            songDiv.appendChild(songImg);
+            continue;
+        }
+        songDiv.textContent += songs[attributes] + " ";
+    }
+    songsList.appendChild(songDiv);
+}
