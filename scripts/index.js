@@ -49,8 +49,6 @@ function createElement(tagName, children = [], classes = [], attributes = {}) {
         newElement.classList.add(className);
     }
     for(let trait in attributes){
-        console.log(trait + "hola");
-        console.log(attributes[trait] + "WELLO");
         newElement.setAttribute(trait,attributes[trait]);
     }
     return newElement;
@@ -70,12 +68,11 @@ function durationToMS(duration){
 const songsList = document.getElementById("songs");
 const playerSongs = player.songs;
 for(let songs of playerSongs){
-    const songDiv = document.createElement("div");
+    const songDiv = createElement("div", [], ["songs"]);
     songDiv.style.border = "4px solid black";
     for(let attributes in songs){
         if(attributes === "coverArt"){
-            const songImg = document.createElement("img");
-            songImg.src = songs[attributes];
+            const songImg = createElement("img", [], ["images"], {src: songs[attributes]});
             songImg.style.width = "50px";
             songImg.style.height = "50px";
             songDiv.appendChild(songImg);
