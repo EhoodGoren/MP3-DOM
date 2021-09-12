@@ -111,8 +111,13 @@ function playlistDuration(id) {
 function showSongs(){
     const songListDiv = document.getElementById("songs");
     songListDiv.classList.add("playerParts");
+    const sortedPlayerSongs = player.songs;
+    sortedPlayerSongs.sort(function(a,b){
+        if(a.title.toLowerCase()<b.title.toLowerCase()) return -1; 
+        else return 1;
+    });
     
-    for(let songs of player.songs){
+    for(let songs of sortedPlayerSongs){
         const newSongDiv = createSongElement(songs);
         newSongDiv.style.border = "4px solid black";
         for(let attributes in songs){
@@ -135,8 +140,13 @@ showSongs();
 function showPlaylists(){
     const playlistsListDiv = document.getElementById("playlists");
     playlistsListDiv.classList.add("playerParts");
-    const playerPlaylists = player.playlists;
-    for(let playlists of playerPlaylists){
+    const sortedPlayerPlaylists = player.playlists;
+    sortedPlayerSongs.sort(function(a,b){
+        if(a.name.toLowerCase()<b.name.toLowerCase())return -1;
+        else return 1;
+      });
+
+    for(let playlists of sortedPlayerPlaylists){
         const newPlaylistDiv = createElement("div", [], ["playlists"]);
         newPlaylistDiv.style.border = "4px solid black";
         for(let attributes in playlists){
