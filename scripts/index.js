@@ -27,12 +27,9 @@ function playSong(songId) {
     }
     let nextIdToPlay = sortedPlayerSongs[nextSongIndexToPlay].id;
 
-    setInterval( () => {
+    setTimeout( () => {
         playSong(nextIdToPlay);
-    }, 3000)
-    /*const playedSong = document.getElementById(songId);
-    playedSong.style.backgroundColor = "#33D325";
-    playedSong.style.marginLeft = "20px";*/
+    }, sortedPlayerSongs[songIndex].duration * 1000);
 }
 
 /**
