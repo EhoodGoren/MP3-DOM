@@ -5,7 +5,9 @@
  * @param {String} songId - the ID of the song to play
  */
 function playSong(songId) {
-    // Your code here
+    const playedSong = document.getElementById(songId);
+    playedSong.style.backgroundColor = "green";
+    playedSong.style.marginLeft = "20px";
 }
 
 /**
@@ -16,9 +18,9 @@ function createSongElement({ id, title, album, artist, duration, coverArt }) {
     //const children = [songImg];
     const children = [];
     const classes = [];
-    const attrs = {/*
+    const attrs = {
         "id":id,
-        "title":title,
+        /*"title":title,
         "album":album,
         "artist":artist,
         "duration":durationToMS(duration),*/
