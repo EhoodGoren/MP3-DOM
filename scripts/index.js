@@ -11,9 +11,28 @@ function playSong(songId) {
         divs.style.marginLeft = "0px";
     }
 
+    // Plays a song
     const playedSong = document.getElementById(songId);
     playedSong.style.backgroundColor = "#33D325";
     playedSong.style.marginLeft = "20px";
+
+    // Song number on the list that is played
+    const sortedPlayerSongs=sortPlayerSongsByTitle();
+    let songIndex = sortedPlayerSongs.indexOf(songById(songId));
+
+    // Defines the next song to play
+    let nextSongIndexToPlay = songIndex + 1;
+    if(nextSongIndexToPlay === sortedPlayerSongs.length){
+        nextSongIndexToPlay = 0;
+    }
+    let nextIdToPlay = sortedPlayerSongs[nextSongIndexToPlay].id;
+
+    setInterval( () => {
+        playSong(nextIdToPlay);
+    }, 3000)
+    /*const playedSong = document.getElementById(songId);
+    playedSong.style.backgroundColor = "#33D325";
+    playedSong.style.marginLeft = "20px";*/
 }
 
 /**
@@ -116,14 +135,19 @@ function playlistDuration(id) {
     return sum;
 }
 
-function showSongs(){
-    const songListDiv = document.getElementById("songs");
-    songListDiv.classList.add("playerParts");
+function sortPlayerSongsByTitle (){
     const sortedPlayerSongs = player.songs;
     sortedPlayerSongs.sort(function(a,b){
         if(a.title.toLowerCase()<b.title.toLowerCase()) return -1; 
         else return 1;
     });
+    return sortedPlayerSongs;
+}
+
+function showSongs(){
+    const songListDiv = document.getElementById("songs");
+    songListDiv.classList.add("playerParts");
+    const sortedPlayerSongs = sortPlayerSongsByTitle();
     
     for(let songs of sortedPlayerSongs){
         const newSongDiv = createSongElement(songs);
