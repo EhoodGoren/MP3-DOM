@@ -12,20 +12,29 @@ function playSong(songId) {
  * Creates a song DOM element based on a song object.
  */
 function createSongElement({ id, title, album, artist, duration, coverArt }) {
-    const children = []
-    const classes = []
-    const attrs = { onclick: `playSong(${id})` }
-    return createElement("div", children, classes, attrs)
+    //const songImg = createElement("img", [], ["songImgs"], { src: coverArt , style:"width : 50px", style:"height : 50px" });
+    //const children = [songImg];
+    const children = [];
+    const classes = [];
+    const attrs = {/*
+        "id":id,
+        "title":title,
+        "album":album,
+        "artist":artist,
+        "duration":durationToMS(duration),*/
+        onclick: `playSong(${id})`
+    };
+    return createElement("div", children, classes, attrs);
 }
 
 /**
  * Creates a playlist DOM element based on a playlist object.
  */
 function createPlaylistElement({ id, name, songs }) {
-    const children = []
-    const classes = []
-    const attrs = {}
-    return createElement("div", children, classes, attrs)
+    const children = [];
+    const classes = [];
+    const attrs = {};
+    return createElement("div", children, classes, attrs);
 }
 
 /**
@@ -49,10 +58,11 @@ function createElement(tagName, children = [], classes = [], attributes = {}) {
         newElement.classList.add(className);
     }
     for(let trait in attributes){
-        newElement.setAttribute(trait,attributes[trait]);
+        newElement.setAttribute(trait, attributes[trait]);
     }
     return newElement;
 }
+
 
 // You can write more code below this line
 
@@ -98,37 +108,43 @@ function playlistDuration(id) {
     return sum;
 }
 
-const songsListDiv = document.getElementById("songs");
-const playerSongs = player.songs;
-for(let songs of playerSongs){
-    const newSongDiv = createElement("div", [], ["songs"]);
-    newSongDiv.style.border = "4px solid black";
-    for(let attributes in songs){
-        if(attributes === "coverArt"){
-            const songImg = createElement("img", [], ["images"], {src: songs[attributes]});
-            songImg.style.width = "50px";
-            songImg.style.height = "50px";
-            newSongDiv.appendChild(songImg);
-            continue;
+function showSongs(){
+    const songListDiv = document.getElementById("songs");
+    songListDiv.classList.add("playerParts");
+    
+    for(let songs of player.songs){
+        const newSongDiv = createSongElement(songs);
+        newSongDiv.style.border = "4px solid black";
+        for(let attributes in songs){
+            if(attributes === "duration"){
+                newSongDiv.textContent += durationToMS(songs[attributes]) + " ";
+                continue;
+            }
+            if(attributes === "coverArt"){
+                const songImg = createElement("img", [], ["images"], {src: songs[attributes], style:"width : 50px", style:"height : 50px"});
+                newSongDiv.appendChild(songImg);
+                continue;
+            }
+            newSongDiv.textContent += songs[attributes] + " ";
         }
-        if(attributes === "duration"){
-            newSongDiv.textContent += durationToMS(songs[attributes]) + " ";
-            continue;
-        }
-        newSongDiv.textContent += songs[attributes] + " ";
+        songListDiv.appendChild(newSongDiv);
     }
-    songsListDiv.appendChild(newSongDiv);
 }
+showSongs();
 
-const playlistsListDiv = document.getElementById("playlists");
-const playerPlaylists = player.playlists;
-for(let playlists of playerPlaylists){
-    const newPlaylistDiv = createElement("div", [], ["playlists"]);
-    newPlaylistDiv.style.border = "4px solid black";
-    for(let attributes in playlists){
-        newPlaylistDiv.textContent += playlists[attributes] + " ";
+function showPlaylists(){
+    const playlistsListDiv = document.getElementById("playlists");
+    playlistsListDiv.classList.add("playerParts");
+    const playerPlaylists = player.playlists;
+    for(let playlists of playerPlaylists){
+        const newPlaylistDiv = createElement("div", [], ["playlists"]);
+        newPlaylistDiv.style.border = "4px solid black";
+        for(let attributes in playlists){
+            newPlaylistDiv.textContent += playlists[attributes] + " ";
+        }
+        const newPlaylistDuration = playlistDuration(playlists.id);
+        newPlaylistDiv.textContent += durationToMS(newPlaylistDuration) + " " ;
+        playlistsListDiv.appendChild(newPlaylistDiv);
     }
-    const newPlaylistDuration = playlistDuration(playlists.id);
-    newPlaylistDiv.textContent += durationToMS(newPlaylistDuration) + " " ;
-    playlistsListDiv.appendChild(newPlaylistDiv);
 }
+showPlaylists();
