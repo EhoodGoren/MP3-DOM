@@ -1,1 +1,17 @@
 /* Your code here */
+
+.songs, .playlists {
+    height: 50px;
+    background-Color : #C5EDF0;
+    margin-Left : 0px;
+    margin-bottom: 10px;
+    text-align: center;
+}
+
+.images {
+    float: left;
+}
+
+.playerParts {
+    padding-bottom: 50px;
+}
