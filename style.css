@@ -1,6 +1,11 @@
 /* Your code here */
 
+body {
+    background-color: #D2BB2A;
+}
+
 .songs, .playlists {
+    width: 40%;
     height: 50px;
     background-Color : #C5EDF0;
     margin-Left : 0px;
@@ -15,5 +20,5 @@
 }
 
 .playerParts {
-    padding-bottom: 50px;
+    padding-bottom: 20px;
 }
