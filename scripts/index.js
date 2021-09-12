@@ -65,25 +65,70 @@ function durationToMS(duration){
     return `${minutes}:${seconds}`;
 }
 
-const songsList = document.getElementById("songs");
+// Returns the song object that matches the id (error if unmatched)
+function songById(id){
+    let playerSongs = player.songs;
+    //Loops through the songs array and looks for the id in each element
+    for(let tracks of playerSongs){
+      if(tracks.id===id) return tracks;
+    }
+    throw "ID doesn't exist!";
+}
+
+// Returns the playlist object that matches the id (error if unmatched)
+function playlistById(id){
+    let playerPlaylists = player.playlists;
+    //Loops through the playlists array and looks for the id in each element
+    for(let lists of playerPlaylists){
+      if(lists.id===id) return lists;
+    }
+    throw "ID doesn't exist!";
+}
+
+// Sums the total duration of all the songs in a playlist
+function playlistDuration(id) {
+    // Checks if the playlist id exists.
+    let currentPlaylist=playlistById(id);
+  
+    let chosenPlaylistSongs=currentPlaylist.songs;
+    let sum=0;
+    for(let song of chosenPlaylistSongs){
+      sum+=songById(song).duration;
+    }
+    return sum;
+}
+
+const songsListDiv = document.getElementById("songs");
 const playerSongs = player.songs;
 for(let songs of playerSongs){
-    const songDiv = createElement("div", [], ["songs"]);
-    songDiv.style.border = "4px solid black";
+    const newSongDiv = createElement("div", [], ["songs"]);
+    newSongDiv.style.border = "4px solid black";
     for(let attributes in songs){
         if(attributes === "coverArt"){
             const songImg = createElement("img", [], ["images"], {src: songs[attributes]});
             songImg.style.width = "50px";
             songImg.style.height = "50px";
-            songDiv.appendChild(songImg);
+            newSongDiv.appendChild(songImg);
             continue;
         }
         if(attributes === "duration"){
-            songDiv.textContent += durationToMS(songs[attributes]) + " ";
+            newSongDiv.textContent += durationToMS(songs[attributes]) + " ";
             continue;
         }
-        songDiv.textContent += songs[attributes] + " ";
+        newSongDiv.textContent += songs[attributes] + " ";
     }
-    songsList.appendChild(songDiv);
+    songsListDiv.appendChild(newSongDiv);
 }
 
+const playlistsListDiv = document.getElementById("playlists");
+const playerPlaylists = player.playlists;
+for(let playlists of playerPlaylists){
+    const newPlaylistDiv = createElement("div", [], ["playlists"]);
+    newPlaylistDiv.style.border = "4px solid black";
+    for(let attributes in playlists){
+        newPlaylistDiv.textContent += playlists[attributes] + " ";
+    }
+    const newPlaylistDuration = playlistDuration(playlists.id);
+    newPlaylistDiv.textContent += durationToMS(newPlaylistDuration) + " " ;
+    playlistsListDiv.appendChild(newPlaylistDiv);
+}
