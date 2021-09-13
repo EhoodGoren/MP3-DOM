@@ -173,42 +173,27 @@ function playlistDuration(id) {
     }
     return sum;
 }
-function sortPlayerSongsByTitle (){
-    const sortedPlayerSongs = player.songs;
-    sortedPlayerSongs.sort(function(a,b){
+
+function sortSongsByTitle (songs){
+    songs.sort(function(a,b){
         if(a.title.toLowerCase()<b.title.toLowerCase()) return -1; 
         else return 1;
     });
-    return sortedPlayerSongs;
+    return songs;
+}
+
+function sortPlaylistsByName (playlists){
+    playlists.sort(function(a,b){
+        if(a.name.toLowerCase()<b.name.toLowerCase())return -1;
+        else return 1;
+    });
+    return playlists;
 }
 
 function showSongs(){
-    /*const songListDiv = document.getElementById("songs");
-    songListDiv.classList.add("playerParts");
-    const sortedPlayerSongs = sortPlayerSongsByTitle();
-    
-    for(let songs of sortedPlayerSongs){
-        const newSongDiv = createSongElement(songs);
-        newSongDiv.style.border = "4px solid black";
-        for(let attributes in songs){
-            if(attributes === "id"){
-                continue;
-            }
-            if(attributes === "duration"){
-                newSongDiv.textContent += durationToMS(songs[attributes]) + " ";
-                continue;
-            }
-            if(attributes === "coverArt"){
-                const songImg = createElement("img", [], ["images"], {src: songs[attributes], style:"width : 50px", style:"height : 50px"});
-                newSongDiv.appendChild(songImg);
-                continue;
-            }
-            newSongDiv.textContent += songs[attributes] + ' / ' ;
-        }
-        songListDiv.appendChild(newSongDiv);
-    }*/
     const songListDiv = document.getElementById("songs");
-    const sortedPlayerSongs = sortPlayerSongsByTitle();
+    const sortedPlayerSongs = sortSongsByTitle(player.songs);
+
     for(let song of sortedPlayerSongs){
         const newSong = createSongElement(song);
         songListDiv.append(newSong);
@@ -217,40 +202,10 @@ function showSongs(){
 showSongs();
 
 function showPlaylists(){
-    /*const playlistsListDiv = document.getElementById("playlists");
-    playlistsListDiv.classList.add("playerParts");
-    const sortedPlayerPlaylists = player.playlists;
-    sortedPlayerPlaylists.sort(function(a,b){
-        if(a.name.toLowerCase()<b.name.toLowerCase())return -1;
-        else return 1;
-    });
-
-    for(let playlists of sortedPlayerPlaylists){
-        const newPlaylistDiv = createElement("div", [], ["playlists"]);
-        newPlaylistDiv.style.border = "4px solid black";
-        for(let attributes in playlists){
-            if(attributes === "id"){
-                continue;
-            }
-            if(attributes === "songs"){
-                newPlaylistDiv.textContent += playlists[attributes].length + " Songs / ";
-                continue;
-            }
-            newPlaylistDiv.textContent += playlists[attributes] + " / ";
-        }
-        const newPlaylistDuration = playlistDuration(playlists.id);
-        newPlaylistDiv.textContent += durationToMS(newPlaylistDuration) + " " ;
-        playlistsListDiv.appendChild(newPlaylistDiv);
-    }*/
     const playlistsListDiv = document.getElementById("playlists");
-    const sortedPlayerPlaylists = player.playlists;
-    sortedPlayerPlaylists.sort(function(a,b){
-        if(a.name.toLowerCase()<b.name.toLowerCase())return -1;
-        else return 1;
-    });
+    const sortedPlayerPlaylists = sortPlaylistsByName(player.playlists);
 
     for(let playlist of sortedPlayerPlaylists){
-        console.log(playlist);
         const newPlaylist = createPlaylistElement(playlist);
         playlistsListDiv.append(newPlaylist);
     }
