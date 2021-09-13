@@ -5,13 +5,14 @@
  * @param {String} songId - the ID of the song to play
  */
 function playSong(songId) {
+    // Resets all songs to natural state
     const allDivs = document.getElementsByClassName("songs");
     for(let divs of allDivs){
         divs.style.backgroundColor = "#C5EDF0";
         divs.style.marginLeft = "0px";
     }
 
-    // Plays a song
+    // Applies play effect on song
     const playedSong = document.getElementById(songId);
     playedSong.style.backgroundColor = "rgb(45,241,45)";
     playedSong.style.marginLeft = "20px";
@@ -52,28 +53,44 @@ function playSong(songId) {
  * Creates a song DOM element based on a song object.
  */
 function createSongElement({ id, title, album, artist, duration, coverArt }) {
-    //const songImg = createElement("img", [], ["songImgs"], { src: coverArt , style:"width : 50px", style:"height : 50px" });
-    //const children = [songImg];
-    const children = [];
+
+    const songTitle = createElement("span", [title], ["songTitles"]);
+
+    const songAlbum = createElement("span", [album]);
+
+    const songArtist = createElement("span", [artist]);
+
+    const songDuration = createElement("span", ["Duration: ", durationToMS(duration)], ["durations"]);
+
+    const songCoverArt = createElement("img", [], ["songImages"] , {src: coverArt, style:"width : 50px", style:"height : 50px"});
+    
+    const newSong = createElement("div")
+
+    const children = [songTitle, songAlbum, songArtist, songDuration,songCoverArt];
     const classes = ["songs"];
     const attrs = {
         "id":id,
-        /*"title":title,
-        "album":album,
-        "artist":artist,
-        "duration":durationToMS(duration),*/
         onclick: `playSong(${id})`
     };
-    return createElement("div", children, classes, attrs);
+    return createElement("div", children , classes, attrs);
 }
 
 /**
  * Creates a playlist DOM element based on a playlist object.
  */
 function createPlaylistElement({ id, name, songs }) {
-    const children = [];
-    const classes = [];
-    const attrs = {};
+
+    const playlistName = createElement("span", [name]);
+
+    const playlistSongs = createElement("span", [songs.length + " songs"]);
+
+    const playlistDuration = playlistDuration(id);
+
+    const children = [playlistName, playlistSongs, playlistDuration];
+    const classes = ["playlists"];
+    const attrs = {
+        "id":id
+    };
     return createElement("div", children, classes, attrs);
 }
 
@@ -91,12 +108,21 @@ function createPlaylistElement({ id, name, songs }) {
  */
 function createElement(tagName, children = [], classes = [], attributes = {}) {
     const newElement = document.createElement(tagName);
+
+    // Children
     for(let child of children){
+        if(typeof(child) === "string"){
+            child = document.createTextNode(child);
+        }
         newElement.appendChild(child);
     }
+
+    // Classes
     for(let className of classes){
         newElement.classList.add(className);
     }
+
+    // Attributes
     for(let trait in attributes){
         newElement.setAttribute(trait, attributes[trait]);
     }
@@ -147,7 +173,6 @@ function playlistDuration(id) {
     }
     return sum;
 }
-
 function sortPlayerSongsByTitle (){
     const sortedPlayerSongs = player.songs;
     sortedPlayerSongs.sort(function(a,b){
@@ -158,7 +183,7 @@ function sortPlayerSongsByTitle (){
 }
 
 function showSongs(){
-    const songListDiv = document.getElementById("songs");
+    /*const songListDiv = document.getElementById("songs");
     songListDiv.classList.add("playerParts");
     const sortedPlayerSongs = sortPlayerSongsByTitle();
     
@@ -181,12 +206,18 @@ function showSongs(){
             newSongDiv.textContent += songs[attributes] + ' / ' ;
         }
         songListDiv.appendChild(newSongDiv);
+    }*/
+    const songListDiv = document.getElementById("songs");
+    const sortedPlayerSongs = sortPlayerSongsByTitle();
+    for(let song of sortedPlayerSongs){
+        const newSong = createSongElement(song);
+        songListDiv.append(newSong);
     }
 }
 showSongs();
 
 function showPlaylists(){
-    const playlistsListDiv = document.getElementById("playlists");
+    /*const playlistsListDiv = document.getElementById("playlists");
     playlistsListDiv.classList.add("playerParts");
     const sortedPlayerPlaylists = player.playlists;
     sortedPlayerPlaylists.sort(function(a,b){
@@ -210,6 +241,18 @@ function showPlaylists(){
         const newPlaylistDuration = playlistDuration(playlists.id);
         newPlaylistDiv.textContent += durationToMS(newPlaylistDuration) + " " ;
         playlistsListDiv.appendChild(newPlaylistDiv);
+    }*/
+    const playlistsListDiv = document.getElementById("playlists");
+    const sortedPlayerPlaylists = player.playlists;
+    sortedPlayerPlaylists.sort(function(a,b){
+        if(a.name.toLowerCase()<b.name.toLowerCase())return -1;
+        else return 1;
+    });
+
+    for(let playlist of sortedPlayerPlaylists){
+        console.log(playlist);
+        const newPlaylist = createPlaylistElement(playlist);
+        playlistsListDiv.append(newPlaylist);
     }
 }
 showPlaylists();
