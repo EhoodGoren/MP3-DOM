@@ -63,8 +63,6 @@ function createSongElement({ id, title, album, artist, duration, coverArt }) {
     const songDuration = createElement("span", ["Duration: ", durationToMS(duration)], ["durations"]);
 
     const songCoverArt = createElement("img", [], ["songImages"] , {src: coverArt, style:"width : 50px", style:"height : 50px"});
-    
-    const newSong = createElement("div")
 
     const children = [songTitle, songAlbum, songArtist, songDuration,songCoverArt];
     const classes = ["songs"];
@@ -84,9 +82,11 @@ function createPlaylistElement({ id, name, songs }) {
 
     const playlistSongs = createElement("span", [songs.length + " songs"]);
 
-    const playlistDuration = playlistDuration(id);
+    let playListTime = playlistDuration(id);
+    playListTime = durationToMS(playListTime);
+    const playlistLength = createElement("span", ["Duration: ", playListTime], ["durations"])
 
-    const children = [playlistName, playlistSongs, playlistDuration];
+    const children = [playlistName, playlistSongs, playlistLength];
     const classes = ["playlists"];
     const attrs = {
         "id":id
@@ -111,10 +111,10 @@ function createElement(tagName, children = [], classes = [], attributes = {}) {
 
     // Children
     for(let child of children){
-        if(typeof(child) === "string"){
+        /*if(typeof(child) === "string"){
             child = document.createTextNode(child);
-        }
-        newElement.appendChild(child);
+        }*/
+        newElement.append(child);
     }
 
     // Classes
