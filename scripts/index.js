@@ -53,12 +53,12 @@ function playSong(songId) {
  * Creates a song DOM element based on a song object.
  */
 function createSongElement({ id, title, album, artist, duration, coverArt }) {
+    
+    const songTitle = createElement("span", [" " + title], ["songTitles"]);
 
-    const songTitle = createElement("span", [title], ["songTitles"]);
+    const songAlbum = createElement("span", [" " + album]);
 
-    const songAlbum = createElement("span", [album]);
-
-    const songArtist = createElement("span", [artist]);
+    const songArtist = createElement("span", [" " + artist]);
 
     const songDuration = createElement("span", ["Duration: ", durationToMS(duration)], ["durations"]);
 
@@ -78,9 +78,9 @@ function createSongElement({ id, title, album, artist, duration, coverArt }) {
  */
 function createPlaylistElement({ id, name, songs }) {
 
-    const playlistName = createElement("span", [name]);
+    const playlistName = createElement("span", [" " + name]);
 
-    const playlistSongs = createElement("span", [songs.length + " songs"]);
+    const playlistSongs = createElement("span", [" " + songs.length + " songs"]);
 
     let playListTime = playlistDuration(id);
     playListTime = durationToMS(playListTime);
