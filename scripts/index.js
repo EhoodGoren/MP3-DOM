@@ -18,7 +18,7 @@ function playSong(songId) {
     playedSong.style.marginLeft = "20px";
 
     // Song number on the list that is played
-    const sortedPlayerSongs=sortPlayerSongsByTitle();
+    const sortedPlayerSongs=sortSongsByTitle(player.songs);
     let songIndex = sortedPlayerSongs.indexOf(songById(songId));
 
     // Defines the next song to play
@@ -53,7 +53,7 @@ function playSong(songId) {
  * Creates a song DOM element based on a song object.
  */
 function createSongElement({ id, title, album, artist, duration, coverArt }) {
-    
+
     const songTitle = createElement("span", [" " + title], ["songTitles"]);
 
     const songAlbum = createElement("span", [" " + album]);
@@ -132,7 +132,7 @@ function createElement(tagName, children = [], classes = [], attributes = {}) {
 
 // You can write more code below this line
 
-// Changes duration format from seconds to minutes:seconds
+// Changes duration format from seconds to minutes:seconds.
 function durationToMS(duration){
     let minutes=Math.floor(duration/60);
     let seconds=duration%60;
@@ -141,7 +141,7 @@ function durationToMS(duration){
     return `${minutes}:${seconds}`;
 }
 
-// Returns the song object that matches the id (error if unmatched)
+// Returns the song object that matches the id (error if unmatched).
 function songById(id){
     let playerSongs = player.songs;
     //Loops through the songs array and looks for the id in each element
@@ -151,7 +151,7 @@ function songById(id){
     throw "ID doesn't exist!";
 }
 
-// Returns the playlist object that matches the id (error if unmatched)
+// Returns the playlist object that matches the id (error if unmatched).
 function playlistById(id){
     let playerPlaylists = player.playlists;
     //Loops through the playlists array and looks for the id in each element
@@ -161,7 +161,7 @@ function playlistById(id){
     throw "ID doesn't exist!";
 }
 
-// Sums the total duration of all the songs in a playlist
+// Sums the total duration of all the songs in a playlist.
 function playlistDuration(id) {
     // Checks if the playlist id exists.
     let currentPlaylist=playlistById(id);
@@ -174,6 +174,7 @@ function playlistDuration(id) {
     return sum;
 }
 
+// Sorts a songs array by their title (ascending).
 function sortSongsByTitle (songs){
     songs.sort(function(a,b){
         if(a.title.toLowerCase()<b.title.toLowerCase()) return -1; 
@@ -182,6 +183,7 @@ function sortSongsByTitle (songs){
     return songs;
 }
 
+// Sorts a playlists array by their name (ascending).
 function sortPlaylistsByName (playlists){
     playlists.sort(function(a,b){
         if(a.name.toLowerCase()<b.name.toLowerCase())return -1;
@@ -190,24 +192,26 @@ function sortPlaylistsByName (playlists){
     return playlists;
 }
 
-function showSongs(){
+// Adds a songs array to the DOM
+function showSongs(songs){
     const songListDiv = document.getElementById("songs");
-    const sortedPlayerSongs = sortSongsByTitle(player.songs);
+    const sortedPlayerSongs = sortSongsByTitle(songs);
 
     for(let song of sortedPlayerSongs){
         const newSong = createSongElement(song);
         songListDiv.append(newSong);
     }
 }
-showSongs();
+showSongs(player.songs);
 
-function showPlaylists(){
+// Adds a playlists array to the DOM
+function showPlaylists(playlists){
     const playlistsListDiv = document.getElementById("playlists");
-    const sortedPlayerPlaylists = sortPlaylistsByName(player.playlists);
+    const sortedPlayerPlaylists = sortPlaylistsByName(playlists);
 
     for(let playlist of sortedPlayerPlaylists){
         const newPlaylist = createPlaylistElement(playlist);
         playlistsListDiv.append(newPlaylist);
     }
 }
-showPlaylists();
+showPlaylists(player.playlists);
