@@ -5,7 +5,32 @@
  * @param {Number} songId - the ID of the song to play
  */
 function playSong(songId) {
-    // Your code here
+    // Resets all songs to natural state
+    const allDivs = document.getElementsByClassName("songs");
+    for(let divs of allDivs){
+        divs.style.backgroundColor = "#68739c";
+        divs.style.marginLeft = "0px";
+    }
+
+    // Applies play effect on song
+    const playedSong = document.getElementById(songId);
+    playedSong.style.backgroundColor = "rgb(45,241,45)";
+    playedSong.style.marginLeft = "20px";
+
+    // Song number on the list that is played
+    const sortedPlayerSongs=sortSongsByTitle(player.songs);
+    let songIndex = sortedPlayerSongs.indexOf(songById(songId));
+
+    // Defines the next song to play
+    let nextSongIndexToPlay = songIndex + 1;
+    if(nextSongIndexToPlay === sortedPlayerSongs.length){
+        nextSongIndexToPlay = 0;
+    }
+    let nextIdToPlay = sortedPlayerSongs[nextSongIndexToPlay].id;
+
+    setTimeout( () => {
+        playSong(nextIdToPlay);
+    }, sortedPlayerSongs[songIndex].duration * 1000);
 }
 
 /**
@@ -20,8 +45,19 @@ function removeSong(songId) {
 /**
  * Adds a song to the player, and updates the DOM to match.
  */
-function addSong({ title, album, artist, duration, coverArt }) {
-    // Your code here
+function addSong({id, title, album, artist, duration, coverArt}) {
+    if(id===undefined){
+      id=songIdGenerator();
+    } else if(id>0){
+      isIdTakenSongs(id);
+    } else{
+      throw "Id should be a number!"
+    }
+    duration = durationToSec(duration);
+    const newSong = {id, title, album, artist, duration, coverArt};
+    player.songs.push(newSong);
+    generateSongs(player.songs);
+    return id;
 }
 
 /**
@@ -40,7 +76,16 @@ function handleSongClickEvent(event) {
  * @param {MouseEvent} event - the click event
  */
 function handleAddSongEvent(event) {
-    // Your code here
+    const inputs = document.querySelectorAll("#inputs")[0];
+
+    const title = inputs.querySelectorAll("[name='title']")[0].value;
+    const album = inputs.querySelectorAll("[name='album']")[0].value;
+    const artist = inputs.querySelectorAll("[name='artist']")[0].value;
+    const duration = inputs.querySelectorAll("[name='duration']")[0].value;
+    const coverArt = inputs.querySelectorAll("[name='cover-art']")[0].value;
+
+    const newSong = {title, album, artist, duration, coverArt};
+    addSong(newSong);
 }
 
 /**
@@ -135,6 +180,11 @@ function generateSongs(songs) {
     const songListDiv = document.getElementById("songs");
     const sortedPlayerSongs = sortSongsByTitle(songs);
 
+    const existingSongs = document.querySelectorAll(".songs");
+    for(let song of existingSongs){
+        songListDiv.removeChild(song);
+    }
+    
     for(let song of sortedPlayerSongs){
         const newSong = createSongElement(song);
         songListDiv.append(newSong);
@@ -159,7 +209,7 @@ generateSongs(player.songs);
 generatePlaylists(player.playlists);
 
 // Making the add-song-button actually do something
-document.getElementById("add-button").addEventListener("click", handleAddSongEvent)
+document.getElementById("add-button").addEventListener("click", handleAddSongEvent);
 
 
 
@@ -241,3 +291,39 @@ function getSongDurationColor (duration) {
         return `rgb(230,${g},25)`;
     }
 }
+
+// Throws an error if a song with the given id already exists in the songs array.
+function isIdTakenSongs(id){
+    for(let song of player.songs){
+      if(song.id===id) throw "Id taken";
+    }
+}
+
+function songIdGenerator(){
+    id=0;
+    let taken=false;
+    // Increases id by 1 every time. Loops through the songs array, trying to find a non-occupied id.
+    do {
+      taken=false;
+      id++;
+      for(let song of player.songs){
+        if(song.id===id){
+          taken=true;
+          break;
+        }
+      }
+    } while(taken);
+    return id;
+}
+
+function durationToSec(duration){
+    duration.split("");
+    let secDuration=0;
+    secDuration+=(
+      parseInt(duration[0]*600)+
+      parseInt(duration[1]*60)+
+      parseInt(duration[3])*10+
+      parseInt(duration[4])
+    );
+    return secDuration;
+  }
