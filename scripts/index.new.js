@@ -39,15 +39,17 @@ function playSong(songId) {
  * @param {Number} songId - the ID of the song to remove
  */
 function removeSong(songId) {
+    songId = parseInt(songId);
     let currentSong=songById(songId);
-
     player.songs.splice(player.songs.indexOf(currentSong), 1);
     for(let list of player.playlists){
         if(list.songs.includes(songId)){
             list.songs.splice(list.songs.indexOf(songId),1);
         }
     }
+    
     generateSongs(player.songs);
+    generatePlaylists(player.playlists);
 }
 
 /**
@@ -215,6 +217,11 @@ function generateSongs(songs) {
 function generatePlaylists(playlists) {
     const playlistsListDiv = document.getElementById("playlists");
     const sortedPlayerPlaylists = sortPlaylistsByName(playlists);
+
+    const existingPlaylists = document.querySelectorAll(".playlists");
+    for(let playlist of existingPlaylists){
+        playlistsListDiv.removeChild(playlist);
+    }
 
     for(let playlist of sortedPlayerPlaylists){
         const newPlaylist = createPlaylistElement(playlist);
