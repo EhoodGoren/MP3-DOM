@@ -28,3 +28,7 @@ body {
 .playerParts {
     padding-bottom: 20px;
 }
+
+.play-buttons, .remove-buttons{
+    float: right;
+}

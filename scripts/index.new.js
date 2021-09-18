@@ -39,7 +39,15 @@ function playSong(songId) {
  * @param {Number} songId - the ID of the song to remove
  */
 function removeSong(songId) {
-    // Your code here
+    let currentSong=songById(songId);
+
+    player.songs.splice(player.songs.indexOf(currentSong), 1);
+    for(let list of player.playlists){
+        if(list.songs.includes(songId)){
+            list.songs.splice(list.songs.indexOf(songId),1);
+        }
+    }
+    generateSongs(player.songs);
 }
 
 /**
@@ -67,7 +75,13 @@ function addSong({id, title, album, artist, duration, coverArt}) {
  * @param {MouseEvent} event - the click event
  */
 function handleSongClickEvent(event) {
-    // Your code here
+    const songParent = event.target.parentElement;
+    if(event.target.className === "play-buttons"){
+        playSong(songParent.id);
+    }
+    if(event.target.className === "remove-buttons"){
+        removeSong(songParent.id);
+    }
 }
 
 /**
@@ -104,12 +118,13 @@ function createSongElement({ id, title, album, artist, duration, coverArt }) {
 
     const songCoverArt = createElement("img", [], ["songImages"] , {src: coverArt, style:"width : 50px", style:"height : 50px"});
 
-    //onclick!
-    const children = [songTitle, songAlbum, songArtist, songDuration,songCoverArt];
+    const songPlayButton = createElement("button", ["♫"], ["play-buttons"]);
+    const songDeleteButton = createElement("button", ["X"], ["remove-buttons"]);
+
+    const children = [songTitle, songAlbum, songArtist, songDuration,songCoverArt, songDeleteButton, songPlayButton];
     const classes = ["songs"];
     const attrs = {
         "id":id,
-        onclick: `playSong(${id})`
     };
     return createElement("div", children , classes, attrs);
 }
@@ -169,6 +184,9 @@ function createElement(tagName, children = [], classes = [], attributes = {}, ev
     }
 
     // Event listeners
+    for(let listeners in eventListeners){
+        newElement.addEventListener(listeners, eventListeners[listeners]);
+    }
 
     return newElement;
 }
@@ -208,8 +226,11 @@ function generatePlaylists(playlists) {
 generateSongs(player.songs);
 generatePlaylists(player.playlists);
 
-// Making the add-song-button actually do something
-document.getElementById("add-button").addEventListener("click", handleAddSongEvent);
+/*// Making the add-song-button actually do something
+document.getElementById("add-button").addEventListener("click", handleAddSongEvent);*/
+
+const body = document.querySelectorAll("body")[0];
+body.addEventListener("click", handleSongClickEvent);
 
 
 
@@ -227,7 +248,7 @@ function songById(id){
     let playerSongs = player.songs;
     //Loops through the songs array and looks for the id in each element
     for(let tracks of playerSongs){
-      if(tracks.id===id) return tracks;
+        if(tracks.id==id) return tracks;
     }
     throw "ID doesn't exist!";
 }
