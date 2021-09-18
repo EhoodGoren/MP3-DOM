@@ -47,7 +47,7 @@ function removeSong(songId) {
             list.songs.splice(list.songs.indexOf(songId),1);
         }
     }
-    
+
     generateSongs(player.songs);
     generatePlaylists(player.playlists);
 }
@@ -83,6 +83,9 @@ function handleSongClickEvent(event) {
     }
     if(event.target.className === "remove-buttons"){
         removeSong(songParent.id);
+    }
+    if(event.target.id === "add-button"){
+        handleAddSongEvent(event);
     }
 }
 
